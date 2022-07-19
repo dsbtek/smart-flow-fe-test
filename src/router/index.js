@@ -39,9 +39,9 @@ Vue.use(VueRouter)
         },
       },
       {
-        path: '/team',
-        name: 'Team',
-        component: AdminRoutes.Team,
+        path: '/customer',
+        name: 'Customer',
+        component: AdminRoutes.Customer,
         meta: {
             middleware: [
               isAuthenticated
@@ -49,19 +49,9 @@ Vue.use(VueRouter)
         },
       },
       {
-        path: '/blog',
-        name: 'Blogs',
-        component: AdminRoutes.Blogs,
-        meta: {
-            middleware: [
-              isAuthenticated
-            ]
-        },
-      },
-      {
-        path: '/testimonials',
-        name: 'Testimonials',
-        component: AdminRoutes.Testimonials,
+        path: '/user',
+        name: 'User',
+        component: AdminRoutes.User,
         meta: {
             middleware: [
               isAuthenticated

@@ -16,9 +16,8 @@
         data() {
             return {
                 items: [],
-                blogs: null,
-                team: [],
-                testimonials: [],
+                customers: [],
+                users: [],
             }
         },
         components: {
@@ -26,40 +25,31 @@
         },
         computed: {},
         created() {
-            this.loadBlog()
-            this.loadTeam()
-            this.loadTestimonials()
+            
+            this.loadCustomers()
+            this.loadUsers()
             this.setHeaderTitle('Dashboard')
         },
         mounted() { },
         methods: {
             ...mapActions({
                 setTitle: 'setTitle',
-                getAllBlogs: 'blogs/getAllBlogs',
-                getAllTeamMembers: 'team/getAllTeamMembers',
-                getAllTestimonials: 'testimonials/getAllTestimonials'
+                getAllCustomers: 'customers/getAllCustomers',
+                getAllUsers: 'users/getAllUser'
             }),
-            async loadBlog() {
-                const blog = await this.getAllBlogs()
+            async loadCustomers() {
+                const customer = await this.getAllCustomers()
                 const item = {
-                    title: 'Blogs',
-                    total: blog.length
+                    title: 'Customers',
+                    total: customer.length
                 }
                 this.items.push(item)
             },
-            async loadTeam() {
-                const team = await this.getAllTeamMembers()
+            async loadUsers() {
+                const users = await this.getAllUsers()
                 const item = {
-                    title: 'Team Members',
-                    total: team.length
-                }
-                this.items.push(item)
-            },
-            async loadTestimonials() {
-                const testimonials = await this.getAllTestimonials()
-                const item = {
-                    title: 'Testimonials',
-                    total: testimonials.length
+                    title: 'Users',
+                    total: users.length
                 }
                 this.items.push(item)
             },

@@ -1,20 +1,14 @@
 <template>
     <v-card>
-        <!--<v-card-title>
-            <v-spacer></v-spacer>
-            <v-text-field class="mb-6" v-model="search" append-icon="mdi-magnify" label="Search" single-line
-                hide-details></v-text-field>
-        </v-card-title>-->
-
-        <v-data-table :headers="headers" :items="team" :search="search" :options.sync="options"
-            :server-items-length="totalTeamMembers" :loading="loading" class="elevation-1" disable-sort>
+        <v-data-table :headers="headers" :items="customer" :search="search" :options.sync="options"
+            :server-items-length="totalCustomers" :loading="loading" class="elevation-1" disable-sort>
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-spacer></v-spacer>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-dialog v-model="dialog" max-width="700px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn id="bg" dark class="mb-2" v-bind="attrs" v-on="on">Add Team Member</v-btn>
+                            <v-btn id="bg" dark class="mb-2" v-bind="attrs" v-on="on">Add New Customer</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -26,26 +20,24 @@
                                     <v-form v-model="valid">
                                         <v-row>
                                             <v-col cols="12" sm="6" md="6">
-                                                <img id="banner" :src="editedItem.url" alt="avatar">
+                                                <v-text-field :rules="rules.required" v-model="editedItem.customer_name"
+                                                    label="Customer Name" dense />
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
-                                                <v-file-input v-model="editedItem.img" :rules="rules.maxFileSize"
-                                                    accept="image/png, image/jpeg, image/bmp"
-                                                    placeholder="Upload an avatar" prepend-icon="mdi-camera"
-                                                    label="Avatar" value="editedItem.img" @change="onFileChange"
-                                                    dense />
+                                                <v-text-field :rules="rules.required" v-model="editedItem.location"
+                                                    label="Location" dense />
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
-                                                <v-text-field :rules="rules.required" v-model="editedItem.name"
-                                                    label="Name" dense />
+                                                <v-text-field :rules="rules.required" v-model="editedItem.amount_paid"
+                                                    label="Amount Paid" dense />
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
-                                                <v-text-field :rules="rules.required" v-model="editedItem.role"
-                                                    label="Role" dense />
+                                                <v-text-field :rules="rules.required" v-model="editedItem.volume_dispensed"
+                                                    label="Volume Dispensed" dense />
                                             </v-col>
-                                            <v-col cols="12" sm="12" md="12">
-                                                <v-textarea :rules="rules.required" v-model="editedItem.bio" label="Bio"
-                                                    dense />
+                                            <v-col cols="12" sm="6" md="6">
+                                                <v-text-field :rules="rules.required" v-model="editedItem.status"
+                                                    label="Status" dense />
                                             </v-col>
                                         </v-row>
                                     </v-form>
@@ -71,7 +63,7 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <span>No any team member</span>
+                <span>No Record Found</span>
             </template>
         </v-data-table>
     </v-card>
@@ -94,23 +86,31 @@
                 },
                 dialog: false,
                 search: '',
-                totalTeamMembers: 0,
-                team: [],
+                totalCustomers: 0,
+                customer: [],
                 loading: true,
                 options: {},
                 headers: [{
-                    text: 'Name',
+                    text: 'Customer Name',
                     align: 'start',
                     sortable: false,
-                    value: 'name',
+                    value: 'customer_name',
                 },
                 {
-                    text: 'Role',
-                    value: 'role'
+                    text: 'Location',
+                    value: 'location'
                 },
                 {
-                    text: 'Date Created',
-                    value: 'formattedDate'
+                    text: 'Amount Paid',
+                    value: 'amount_paid'
+                },
+                {
+                    text: 'Volume Dispensed',
+                    value: 'volume_dispensed'
+                },
+                {
+                    text: 'Status',
+                    value: 'status'
                 },
                 {
                     text: 'Actions',
@@ -120,16 +120,18 @@
                 ],
                 editedIndex: -1,
                 editedItem: {
-                    img: [],
-                    name: '',
-                    role: '',
-                    bio: ''
+                    customer_name: '',
+                    location: '',
+                    amount_paid: '',
+                    volume_dispensed: '', 
+                    status: ''
                 },
                 defaultItem: {
-                    img: [],
-                    name: '',
-                    role: '',
-                    bio: '',
+                    customer_name: '',
+                    location: '',
+                    amount_paid: '',
+                    volume_dispensed: '', 
+                    status: ''
                 }
             }
         },
@@ -145,12 +147,12 @@
                 baseURL: 'baseURL'
             }),
             formTitle() {
-                return this.editedIndex === -1 ? 'New Team Member' : 'Edit Team Member'
+                return this.editedIndex === -1 ? 'New Customer' : 'Edit Customer'
             }
         },
 
         created() {
-            this.setHeaderTitle('Team')
+            this.setHeaderTitle('Customer')
         },
 
         mounted() {
@@ -160,10 +162,10 @@
         methods: {
             ...mapActions({
                 setTitle: 'setTitle',
-                getAllTeamMembers: 'team/getAllTeamMembers',
-                addNewTeamMember: 'team/addNewTeamMember',
-                editTeamMember: 'team/editTeamMember',
-                archiveTeamMember: 'team/archiveTeamMember'
+                getAllCustomer: 'customers/getAllCustomers',
+                addNewCustomer: 'customers/addNewCustomer',
+                editCustomer: 'customers/editCustomer',
+                archiveCustomer: 'customers/archiveCustomers'
             }),
 
             onFileChange() {
@@ -171,20 +173,20 @@
             },
 
             editItem(item) {
-                this.editedIndex = this.team.indexOf(item)
+                this.editedIndex = this.customer.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.editedItem.url = `${this.baseURL}${this.editedItem.img}`
                 this.dialog = true
             },
 
             async deleteItem(item) {
-                const index = this.team.indexOf(item)
+                const index = this.customer.indexOf(item)
                 const { id } = item
 
-                const editedBlog = confirm('Are you sure you want to delete this item?') && await this.archiveTeamMember(id)
+                const editedBlog = confirm('Are you sure you want to delete this item?') && await this.archiveCustomer(id)
 
                 if (editedBlog) {
-                    this.team.splice(index, 1)
+                    this.customer.splice(index, 1)
                 } else {
                     alert('Unable to delete')
                 }
@@ -201,8 +203,7 @@
             async save() {
                 if (this.editedIndex > -1) {
                     let data = new FormData()
-                    data.append('file', this.editedItem.img)
-                    data.append('type', 'team')
+                    data.append('type', 'customer')
 
                     Object.keys(this.editedItem).forEach((k) => {
                         if (k === 'author' || k === 'title' || k === 'body') {
@@ -211,21 +212,19 @@
                     })
 
                     const id = this.editedItem._id
-                    const editedBlog = await this.editTeamMember({ data, id })
-                    Object.assign(this.team[this.editedIndex], editedBlog)
+                    const editedCustomer = await this.editCustomer({ data, id })
+                    Object.assign(this.customer[this.editedIndex], editedCustomer)
                 } else {
                     let data = new FormData()
-                    data.append('file', this.editedItem.img)
-                    data.append('type', 'team')
-
+                    data.append('type', 'customer')
                     Object.keys(this.editedItem).forEach((k) => {
                         if (k !== 'img') {
                             data.append(`${k}`, this.editedItem[k])
                         }
                     })
 
-                    const newBlog = await this.addNewTeamMember(data)
-                    this.team = [newBlog, ...this.team]
+                    const newCustomer = await this.addNewCustomer(data)
+                    this.customer = [newCustomer, ...this.customer]
                 }
                 this.close()
             },
@@ -242,7 +241,7 @@
                         itemsPerPage
                     } = this.options
 
-                    let items = await this.getAllTeamMembers()
+                    let items = await this.getAllCustomer()
                     const total = items.length
 
                     if (sortBy.length === 1 && sortDesc.length === 1) {
@@ -269,8 +268,8 @@
                     setTimeout(() => {
                         this.loading = false
 
-                        this.team = items
-                        this.totalTeamMembers = total
+                        this.customer = items
+                        this.totalCustomers = total
                     }, 1000)
                 } catch (error) {
                     return {

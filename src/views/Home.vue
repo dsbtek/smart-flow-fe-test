@@ -5,7 +5,7 @@
             <v-col cols="12" sm="8" md="4">
                 <v-card class="mx-auto" max-width="400" elevation="1" :loading="loading" loader-height="5">
                     <v-img class="white--text align-end" height="90" :src="`${BASE_URL}/images/logo.png`" gradient="to top right, rgba(22, 22, 85), rgba(22, 22, 85,.3)" contain>
-                        <v-card-title>Admin Login</v-card-title>
+                        <v-card-title>User Login</v-card-title>
                     </v-img>
 
                     <v-card-text>

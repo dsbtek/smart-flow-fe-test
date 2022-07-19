@@ -1,15 +1,14 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import auth from './modules/auth'
-import blogs from './modules/blogs'
-import team from './modules/team'
-import testimonials from './modules/testimonials'
+import customers from './modules/customers'
+import users from './modules/users'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    baseURL: 'https://kenxedu.com/',
+    baseURL: 'http://localhost:8000/',
     headerTitle: null
   },
 
@@ -32,8 +31,7 @@ export default new Vuex.Store({
 
   modules: {
     auth,
-    blogs,
-    team,
-    testimonials
+    customers,
+    users
   }
 })

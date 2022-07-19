@@ -46,19 +46,14 @@ export default {
                     link: '/dashboard'
                 },
                 {
-                    title: 'Team',
+                    title: 'Customer',
                     icon: 'mdi-account-group',
-                    link: '/team'
+                    link: '/customer'
                 },
                 {
-                    title: 'Blogs',
-                    icon: 'mdi-blogger',
-                    link: '/blog'
-                },
-                {
-                    title: 'Testimonials',
+                    title: 'Users',
                     icon: 'mdi-account-voice',
-                    link: '/testimonials'
+                    link: '/user'
                 },
                 {
                     title: 'Settings',

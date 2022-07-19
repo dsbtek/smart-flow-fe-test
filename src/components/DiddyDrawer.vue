@@ -1,12 +1,12 @@
 <template>
 <v-list dense nav class="py-0">
     <v-list-item two-line :class="miniVariant && 'px-0'">
-        <v-list-item-avatar>
+        <!-- <v-list-item-avatar>
             <img :src="`${BASE_URL}/images/title-logo.png`">
-        </v-list-item-avatar>
+        </v-list-item-avatar> -->
 
         <v-list-item-content>
-            <v-list-item-title id="text-weight-bold" class="text-uppercase">{{ user.firstName }} {{ user.lastName }}</v-list-item-title>
+            <v-list-item-title id="text-weight-bold" class="text-uppercase">{{ user.name }} </v-list-item-title>
             <v-list-item-subtitle class="text-capitalize">{{ user.role }}</v-list-item-subtitle>
         </v-list-item-content>
     </v-list-item>

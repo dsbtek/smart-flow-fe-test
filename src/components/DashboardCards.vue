@@ -15,7 +15,6 @@
 
 <script>
     import {
-        // mapActions,
         mapGetters
     } from 'vuex';
 

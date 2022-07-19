@@ -34,14 +34,19 @@ export default {
   },
 
   actions: {
-    async login ({ dispatch }, credentials) {
+    async login ({ commit }, credentials) {
         try {
             const res = await axios({
                 method: 'post',
                 url: `${store.state.baseURL}api/login`,
                 data: credentials
             })
-            return await dispatch('attempt', res.data.token)
+            localStorage.setItem('auth_token', JSON.stringify(res.data.jwt));
+            commit('authenticated', true)
+            localStorage.setItem('user', JSON.stringify(res.data.user));
+            commit('user', res.data.user)
+
+            return res
         } catch (err) {
             return err.response
         }
@@ -63,26 +68,26 @@ export default {
         }
     },
 
-    async attempt ({ commit }, token) {
-        localStorage.setItem('auth_token', JSON.stringify(token));
-        commit('authenticated', true)
+    // async attempt ({ commit }, token) {
+    //     localStorage.setItem('auth_token', JSON.stringify(token));
+    //     commit('authenticated', true)
 
-        try {
-            const res = await axios({
-                method: 'get',
-                url: `${store.state.baseURL}api/admin`,
-                headers: {
-                    'Authorization': 'Bearer ' + token
-                }
-            })
-            localStorage.setItem('user', JSON.stringify(res.data));
-            commit('user', res.data)
-            return res
-        } catch (error) {
-            this.logout
-            return error.response
-        }
-    },
+    //     try {
+    //         const res = await axios({
+    //             method: 'get',
+    //             url: `${store.state.baseURL}api/admin`,
+    //             headers: {
+    //                 'Authorization': 'Bearer ' + token
+    //             }
+    //         })
+    //         localStorage.setItem('user', JSON.stringify(res.data));
+    //         commit('user', res.data)
+    //         return res
+    //     } catch (error) {
+    //         this.logout
+    //         return error.response
+    //     }
+    // },
 
     async changePassword ({ commit }, data) {
       try {

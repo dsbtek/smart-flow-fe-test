@@ -16,11 +16,11 @@ export default {
   },
 
   actions: {
-    async getAllBlogs () {
+    async getAllCustomers () {
         try {
             const res = await axios({
                 method: 'get',
-                url: `${store.state.baseURL}api/admin/blog`,
+                url: `${store.state.baseURL}api/customers/`,
                 headers: {
                     'Authorization': 'Bearer ' + token
                 }
@@ -30,9 +30,10 @@ export default {
             return error.response
         }
     },
-    async addNewBlog ({ commit }, data) {
+    async addNewCustomer ({ commit }, data) {
+      console.log(data)
       try {
-        const res = await axios.post(`${store.state.baseURL}api/admin/blog`, data, {
+        const res = await axios.post(`${store.state.baseURL}api/customers`, data, {
             headers: {
                 'Authorization': 'Bearer ' + token,
                 "Content-Type": "multipart/form-data"
@@ -44,10 +45,10 @@ export default {
           return err.response
       }
     },
-    async editBlog ({ commit }, payload) {
+    async editCustomer ({ commit }, payload) {
       const { data, id } = payload
       try {
-        const res = await axios.put(`${store.state.baseURL}api/admin/blog/${id}`, data, {
+        const res = await axios.put(`${store.state.baseURL}api/customer/${id}`, data, {
             headers: {
                 'Authorization': 'Bearer ' + token,
                 "Content-Type": "multipart/form-data"
@@ -59,11 +60,26 @@ export default {
           return err.response
       }
     },
-    async archiveBlog ({ commit }, id) {
+    async deleteCustomer ({ commit }, payload) {
+      const { data, id } = payload
+      try {
+        const res = await axios.delete(`${store.state.baseURL}api/customer/${id}`, data, {
+            headers: {
+                'Authorization': 'Bearer ' + token,
+                "Content-Type": "multipart/form-data"
+            }
+        })
+        await commit('', res.data)
+        return res.data
+      } catch (err) {
+          return err.response
+      }
+    },
+    async archiveCustomer ({ commit }, id) {
       try {
         const res = await axios({
           method: 'put',
-          url: `${store.state.baseURL}api/admin/blog/archive/${id}`,
+          url: `${store.state.baseURL}api/customer/${id}`,
           headers: {
               'Authorization': 'Bearer ' + token
           }

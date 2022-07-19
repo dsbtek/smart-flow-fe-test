@@ -1,20 +1,14 @@
 <template>
     <v-card>
-        <!--<v-card-title>
-            <v-spacer></v-spacer>
-            <v-text-field class="mb-6" v-model="search" append-icon="mdi-magnify" label="Search" single-line
-                hide-details></v-text-field>
-        </v-card-title>-->
-
-        <v-data-table :headers="headers" :items="testimonials" :search="search" :options.sync="options"
-            :server-items-length="totalTestimonials" :loading="loading" class="elevation-1" disable-sort>
+        <v-data-table :headers="headers" :items="users" :search="search" :options.sync="options"
+            :server-items-length="totalUsers" :loading="loading" class="elevation-1" disable-sort>
             <template v-slot:top>
                 <v-toolbar flat color="white">
                     <v-spacer></v-spacer>
                     <v-divider class="mx-4" inset vertical></v-divider>
                     <v-dialog v-model="dialog" max-width="700px">
                         <template v-slot:activator="{ on, attrs }">
-                            <v-btn id="bg" dark class="mb-2" v-bind="attrs" v-on="on">Add Testimonials</v-btn>
+                            <v-btn id="bg" dark class="mb-2" v-bind="attrs" v-on="on">Add User</v-btn>
                         </template>
                         <v-card>
                             <v-card-title>
@@ -26,26 +20,20 @@
                                     <v-form v-model="valid">
                                         <v-row>
                                             <v-col cols="12" sm="6" md="6">
-                                                <img id="banner" :src="editedItem.url" alt="avatar">
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
-                                                <v-file-input v-model="editedItem.img" :rules="rules.maxFileSize"
-                                                    accept="image/png, image/jpeg, image/bmp"
-                                                    placeholder="Upload an avatar" prepend-icon="mdi-camera"
-                                                    label="Avatar" value="editedItem.img" @change="onFileChange"
-                                                    dense />
-                                            </v-col>
-                                            <v-col cols="12" sm="6" md="6">
                                                 <v-text-field :rules="rules.required" v-model="editedItem.name"
                                                     label="Name" dense />
                                             </v-col>
                                             <v-col cols="12" sm="6" md="6">
-                                                <v-text-field :rules="rules.required" v-model="editedItem.post"
-                                                    label="Post" dense />
+                                                <v-text-field :rules="rules.required" v-model="editedItem.email"
+                                                    label="Email" dense />
                                             </v-col>
                                             <v-col cols="12" sm="12" md="12">
-                                                <v-textarea :rules="rules.required" v-model="editedItem.quote"
-                                                    label="Quote" dense />
+                                                <v-text-field :rules="rules.required" v-model="editedItem.date_joined"
+                                                    label="Date Created" dense />
+                                            </v-col>
+                                            <v-col cols="12" sm="12" md="12">
+                                                <v-text-field :rules="rules.required" v-model="editedItem.role"
+                                                    label="Role" dense />
                                             </v-col>
                                         </v-row>
                                     </v-form>
@@ -55,8 +43,7 @@
                             <v-card-actions class="pb-10 px-10">
                                 <v-spacer></v-spacer>
                                 <v-btn text @click="close">Cancel</v-btn>
-                                <v-btn :id="valid ? 'allowedBtn' : 'notAllowedBtn'" @click="valid ? save() : null">Save
-                                </v-btn>
+                                <v-btn :id="valid ? 'allowedBtn' : 'notAllowedBtn'" @click="valid ? save() : null">Save</v-btn>
                             </v-card-actions>
                         </v-card>
                     </v-dialog>
@@ -71,7 +58,7 @@
                 </v-icon>
             </template>
             <template v-slot:no-data>
-                <span>No testimonials</span>
+                <span>No Record Found</span>
             </template>
         </v-data-table>
     </v-card>
@@ -94,8 +81,8 @@
                 },
                 dialog: false,
                 search: '',
-                totalTestimonials: 0,
-                testimonials: [],
+                totalUsers: 0,
+                users: [],
                 loading: true,
                 options: {},
                 headers: [{
@@ -105,12 +92,16 @@
                     value: 'name',
                 },
                 {
-                    text: 'Post',
-                    value: 'post'
+                    text: 'Email',
+                    value: 'email'
                 },
                 {
                     text: 'Date Created',
-                    value: 'formattedDate'
+                    value: 'date_joined'
+                },
+                {
+                    text: 'Role',
+                    value: 'role'
                 },
                 {
                     text: 'Actions',
@@ -120,16 +111,16 @@
                 ],
                 editedIndex: -1,
                 editedItem: {
-                    img: [],
                     name: '',
-                    post: '',
-                    quote: ''
+                    email: '',
+                    date_joined: '',
+                    role: ''
                 },
                 defaultItem: {
-                    img: [],
                     name: '',
-                    post: '',
-                    quote: '',
+                    email: '',
+                    date_joined: '',
+                    role: ''
                 }
             }
         },
@@ -145,12 +136,12 @@
                 baseURL: 'baseURL'
             }),
             formTitle() {
-                return this.editedIndex === -1 ? 'New Testimonials' : 'Edit Testimonials'
+                return this.editedIndex === -1 ? 'New User' : 'Edit User'
             }
         },
 
         created() {
-            this.setHeaderTitle('Testimonials')
+            this.setHeaderTitle('Users')
         },
 
         mounted() {
@@ -160,10 +151,10 @@
         methods: {
             ...mapActions({
                 setTitle: 'setTitle',
-                getAllTestimonials: 'testimonials/getAllTestimonials',
-                addNewTestimonial: 'testimonials/addNewTestimonial',
-                editTestimonial: 'testimonials/editTestimonial',
-                archiveTestimonial: 'testimonials/archiveTestimonial'
+                getAllUser: 'users/getAllUser',
+                addNewUser: 'users/addNewUser',
+                editUser: 'users/editUser',
+                archiveUser: 'users/archiveUser'
             }),
 
             onFileChange() {
@@ -171,7 +162,7 @@
             },
 
             editItem(item) {
-                this.editedIndex = this.testimonials.indexOf(item)
+                this.editedIndex = this.users.indexOf(item)
                 this.editedItem = Object.assign({}, item)
                 this.editedItem.url = `${this.baseURL}${this.editedItem.img}`
                 this.dialog = true
@@ -181,9 +172,9 @@
                 const index = this.testimonials.indexOf(item)
                 const { id } = item
 
-                const editedTestimonials = confirm('Are you sure you want to delete this item?') && await this.archiveTestimonial(id)
+                const editedUsers = confirm('Are you sure you want to delete this item?') && await this.archiveUser(id)
 
-                if (editedTestimonials) {
+                if (editedUsers) {
                     this.testimonials.splice(index, 1)
                 } else {
                     alert('Unable to delete')
@@ -201,8 +192,7 @@
             async save() {
                 if (this.editedIndex > -1) {
                     let data = new FormData()
-                    data.append('file', this.editedItem.img)
-                    data.append('type', 'testimonials')
+                    data.append('type', 'users')
 
                     Object.keys(this.editedItem).forEach((k) => {
                         if (k === 'author' || k === 'title' || k === 'body') {
@@ -211,12 +201,11 @@
                     })
 
                     const id = this.editedItem._id
-                    const editedTestimonials = await this.editTestimonial({ data, id })
-                    Object.assign(this.testimonials[this.editedIndex], editedTestimonials)
+                    const editedUsers = await this.editUser({ data, id })
+                    Object.assign(this.users[this.editedIndex], editedUsers)
                 } else {
                     let data = new FormData()
-                    data.append('file', this.editedItem.img)
-                    data.append('type', 'testimonials')
+                    data.append('type', 'users')
 
                     Object.keys(this.editedItem).forEach((k) => {
                         if (k !== 'img') {
@@ -224,8 +213,8 @@
                         }
                     })
 
-                    const newTestimonials = await this.addNewTestimonial(data)
-                    this.testimonials = [newTestimonials, ...this.testimonials]
+                    const newUser = await this.addNewUser(data)
+                    this.users = [newUser, ...this.users]
                 }
                 this.close()
             },
@@ -242,7 +231,7 @@
                         itemsPerPage
                     } = this.options
 
-                    let items = await this.getAllTestimonials()
+                    let items = await this.getAllUser()
                     const total = items.length
 
                     if (sortBy.length === 1 && sortDesc.length === 1) {
@@ -269,8 +258,8 @@
                     setTimeout(() => {
                         this.loading = false
 
-                        this.testimonials = items
-                        this.totalTestimonials = total
+                        this.users = items
+                        this.totalUsers = total
                     }, 1000)
                 } catch (error) {
                     return {
